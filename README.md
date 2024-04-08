@@ -24,7 +24,7 @@ Invidious Cast is a Flask application that generates RSS feeds for podcasts base
 
 1. Clone the repository:
    ```cmd
-   git clone https://github.com/yourusername/invidious-cast.git
+   git clone https://github.com/sean89503/Invidious_Cast.git
    ```
 2. Navigate into created folder:
   ```cmd
