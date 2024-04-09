@@ -9,8 +9,11 @@ Invidious Cast is a Flask application that generates RSS feeds for podcasts base
   - [Using Docker](#using-docker)
 - [Usage](#usage)
 - [Configuration](#configuration)
+- [Known Issues](#issues)
 - [Contributing](#contributing)
 - [License](#license)
+- [Roadmap](#roadmap)
+- [Contributors](#contributors)
 
 ## Features
 
@@ -46,7 +49,7 @@ or try DOCKER_IP:5898/podcast?channelId=CHANNEL_ID&type=audio << this will get y
 
 
 
-Contributing
+## Contributing
 Fork the repository.
 Create a new branch (git checkout -b feature/improvement).
 Make your changes.
@@ -55,13 +58,13 @@ Push to the branch (git push origin feature/improvement).
 Create a new Pull Request.
 Please follow our Code of Conduct in all interactions.
 
-License
+## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 Support
 For any questions or issues, please open an issue on GitHub.
 
-Acknowledgements
+Acknowledgments
 This project uses the following libraries:
 
 Flask: https://flask.palletsprojects.com/
@@ -69,13 +72,17 @@ Requests: https://docs.python-requests.org/
 xml.etree.ElementTree: https://docs.python.org/3/library/xml.etree.elementtree.html
 Release History
 1.0.0
-Initial release
-Roadmap
+Initial release: 4/8/2024
+
+Invidious Cast is not affiliated with or endorsed by YouTube or iTunes. This is an independent project for creating podcast RSS feeds from YouTube content.
+
+## Roadmap
+add support for shorts
+add support for live videos 
 Add support for more customization options in the RSS feed.
 Improve error handling and logging.
 Enhance performance for large YouTube channels.
-Contributors
-Your Name (@yourgithubusername)
-We welcome contributions from the community. If you'd like to contribute, please follow the Contributing guidelines.
 
-Invidious Cast is not affiliated with or endorsed by YouTube or iTunes. This is an independent project for creating podcast RSS feeds from YouTube content.
+## Contributors
+(@sean89503 )
+We welcome contributions from the community. If you'd like to contribute, please follow the Contributing guidelines.
