@@ -1,5 +1,6 @@
 
 !image:https://github.com/sean89503/Invidious_Cast/blob/main/logo.png?raw=true
+![invidious_Cast logo]([https://github.com/sean89503/Invidious_Cast/blob/main/logo.png?raw=true])
 
 # Invidious Cast
 
