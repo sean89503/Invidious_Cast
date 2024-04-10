@@ -1,3 +1,6 @@
+
+!image:https://github.com/sean89503/Invidious_Cast/blob/main/logo.png?raw=true
+
 # Invidious Cast
 
 Invidious Cast is a Flask application that generates RSS feeds for podcasts based on YouTube channels. It allows you to customize the podcast feed format and includes support for iTunes-specific tags.
