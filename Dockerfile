@@ -1,20 +1,28 @@
-# Use a base image with Python and Flask installed
+# Stage 1: Build environment (same as before)
+
+# Stage 2: Production environment (slim image)
 FROM python:3.9-slim
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy the requirements.txt file into the container
-COPY requirements.txt .
+# Copy application code
+COPY app.py /app
+COPY main.py /app
 
-# Install dependencies, including Gunicorn
-RUN pip install --no-cache-dir -r requirements.txt
+# Health Check Module
+COPY health_check.py /app
 
-# Copy the Flask application code into the container
-COPY app.py .
+RUN pip install requests
+RUN pip install waitress
+RUN pip install flask
+RUN pip install yt_dlp
 
-# Expose the port your Flask app runs on
+# Expose port (same as before)
 EXPOSE 5895
 
-# Run the Flask app using Gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:5895", "app:app"]
+# Command to run your script
+CMD ["python", "main.py"]
+
+# Health Check Configuration
+HEALTHCHECK CMD ["python", "-c", "import health_check; health_check.update_health_status()"]
