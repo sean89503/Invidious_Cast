@@ -44,13 +44,24 @@ Invidious Cast is a Flask application that generates RSS feeds for podcasts base
   ```
 4. Run Container 
   ```cmd
-  sudo docker run -e PERMITTED_SOURCES="???" -p 5895:5895 --name invidiouscast invidiouscast
+  sudo docker run -d \
+  --name invidiouscast \
+  -e CAST_DOMAIN=https://YOURDOMAINTOINVIDIOUSCAST \
+  -e WORKERS=12 \
+  -e CRON=300 \
+  -p 5895:5895 \
+  -v /HOST/Docker/invidious-cast/xml_files:/app/xml_files:rw \
+  -v /HOST/Docker/invidious-cast/channels.txt:/app/channels.txt:rw \
+  -v /HOST/invidious-cast/templates:/app/templates:rw \
+  --restart unless-stopped \
+  invidiouscast
+
 ```
-   make sure you add your invidious source URL(s) example "https://invidious.example.com" you can add multable sources like "https://invidious.example1.com,https://invidious.example2.com". The script will see if the channel is on the first listed source and if it can't find it it will move to the next.
+   make sure you add your CAST_DOMAIN URL example "https://invidiouscast.example.com" this is were you want to host it. .
    
 5. Try it out
-got to DOCKER_IP:5898/podcast?channelId=CHANNEL_ID << this will get you a video 
-or try DOCKER_IP:5898/podcast?channelId=CHANNEL_ID&type=audio << this will get you audio 
+got to DOCKER_IP:5898/  << This will show you all the xml files
+or try DOCKER_IP:5898/opml << this will help you create an opml for importing into your podcast manager
 
 
 
