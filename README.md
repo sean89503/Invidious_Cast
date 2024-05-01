@@ -120,7 +120,7 @@ Release History
 
 ## Roadmap
   - add support for filtering shorts, lives and shows
-  = improve logic for geo-blocked videos
+  - improve logic for geo-blocked videos
   - ability to add/remove subscription from browser
   - Add support for more customization options in the RSS feed.
   - Improve error handling and logging.
