@@ -84,6 +84,7 @@ each line must have the channel id and i one peramiter is needed please fill out
 5. Try it out (After a full run)
    got to https://yourdomain.com/  << This will show you all the xml files
    now try https://yourdomain.com/opml << this will help you create an opml url for importing into your podcast manager
+   
    ![image](https://github.com/sean89503/Invidious_Cast/assets/22017525/3e3bfe15-a9ec-4978-9536-f00a7f51900d)
 
 
@@ -118,11 +119,12 @@ Release History
   Invidious Cast is not affiliated with or endorsed by YouTube or iTunes. This is an independent project for creating podcast RSS feeds from YouTube content.
 
 ## Roadmap
-  add support for filtering shorts, lives and shows
-  improve logic for geo-blocked videos
-  Add support for more customization options in the RSS feed.
-  Improve error handling and logging.
-  Enhance performance for large YouTube channels.
+  - add support for filtering shorts, lives and shows
+  = improve logic for geo-blocked videos
+  - ability to add/remove subscription from browser
+  - Add support for more customization options in the RSS feed.
+  - Improve error handling and logging.
+  - Enhance performance for large YouTube channels.
 
 ## Contributors
 (@sean89503 )
