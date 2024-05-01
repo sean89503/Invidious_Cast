@@ -36,7 +36,7 @@ Invidious Cast is a Flask application that generates RSS feeds for podcasts base
    ```
 2. Navigate into created folder:
   ```cmd
-  cd invidious-cast
+  cd Invidious_Cast
   ```
 3. Build a Docker Image
   ```cmd
@@ -47,7 +47,6 @@ Invidious Cast is a Flask application that generates RSS feeds for podcasts base
   sudo docker run -d \
   --name invidiouscast \
   -e CAST_DOMAIN=https://YOURDOMAINTOINVIDIOUSCAST \
-  -e WORKERS=12 \
   -e CRON=300 \
   -p 5895:5895 \
   -v /HOST/Docker/invidious-cast/xml_files:/app/xml_files:rw \
@@ -57,13 +56,14 @@ Invidious Cast is a Flask application that generates RSS feeds for podcasts base
   invidiouscast
 
 ```
-   make sure you add your CAST_DOMAIN URL example "https://invidiouscast.example.com" this is were you want to host it. .
+   make sure you add your 'CAST_DOMAIN' URL example "https://invidiouscast.example.com" this is were you want to host it. .
+   Map the volumes yo were you can access them. the app could run without you having access but it is easer to trublshout and manahe the channels file without     having to access the container.
+  
+   I use [clouflaried tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) to point to Invidious_Cast
    
-5. Try it out
-got to DOCKER_IP:5898/  << This will show you all the xml files
-or try DOCKER_IP:5898/opml << this will help you create an opml for importing into your podcast manager
-
-
+5. Try it out (After a full run)
+got to https://yourdomain.com/  << This will show you all the xml files
+now try https://yourdomain.com/opml << this will help you create an opml url for importing into your podcast manager
 
 ## Contributing
 Fork the repository.
@@ -82,10 +82,11 @@ For any questions or issues, please open an issue on GitHub.
 
 Acknowledgments
 This project uses the following libraries:
-
+waitress: https://github.com/Pylons/waitress
 Flask: https://flask.palletsprojects.com/
 Requests: https://docs.python-requests.org/
 xml.etree.ElementTree: https://docs.python.org/3/library/xml.etree.elementtree.html
+
 Release History
 1.0.0
 Initial release: 4/8/2024
@@ -93,8 +94,8 @@ Initial release: 4/8/2024
 Invidious Cast is not affiliated with or endorsed by YouTube or iTunes. This is an independent project for creating podcast RSS feeds from YouTube content.
 
 ## Roadmap
-add support for shorts
-add support for live videos 
+add support for filtering shorts, lives and shows
+improve logic for geo-blocked videos
 Add support for more customization options in the RSS feed.
 Improve error handling and logging.
 Enhance performance for large YouTube channels.
