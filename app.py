@@ -190,7 +190,11 @@ def download_file(filename):
 def list_files():
  files = [f for f in os.listdir(XML_DIRECTORY) if f.endswith('.xml')]
  file_links = ''.join([f'<a href="/xml_files/{filename}">{filename}</a><br>' for filename in files])
- return f'<h1>XML Files:</h1>{file_links}'
+  
+ # Add the HTML <img> tag for the logo
+ logo_url = 'https://github.com/sean89503/Invidious_Cast/blob/main/logo.png?raw=true'
+ logo_html = f'<img src="{logo_url}" alt="Logo" style="width: 100px; height: 100px;"><br>'
+ return f'{logo_html}<h1>XML Files:</h1>{file_links}'
 
 def generate_opml(files, domain):
  opml_content = '<?xml version="1.0" encoding="UTF-8"?><opml version="1.0">'
