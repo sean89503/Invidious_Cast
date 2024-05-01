@@ -13,6 +13,7 @@ Invidious Cast is a Flask application that generates RSS feeds for podcasts base
 - [Installation](#installation)
   - [Using Docker](#using-docker)
   - [Using Windows](#using-windows)
+  - [Using Mac](#using-mac)
 - [Known Issues](#known-issues)
 - [Contributing](#contributing)
 - [License](#license)
@@ -121,6 +122,46 @@ Run the following command to start your application:
   python main.py
   ```
   If you want to run it at a service I would use [nssm](https://nssm.cc/)
+
+## Using Mac
+### 1. Copy Files
+
+Copy the following files and folders to your desired location:
+- `main.py`
+- `app.py`
+- `requirments.txt`
+- `Template` folder (contains HTML templates for your app)
+
+### 2. Set Environment Variables
+
+1. Open Terminal.
+2. Set the `CAST_DOMAIN` variable:
+   ```cmd
+   export CAST_DOMAIN=https://yourcastdomain.com
+   ```
+3. Set the `CRON` variable (time in seconds between checks for new episodes):
+  ```cmd
+  export CRON=300
+  ```
+
+### 3. Install Requirements
+
+1. Navigate to the directory where your files are located in Terminal.
+2. Install the required packages:
+  ```cmd
+  pip install -r requirements.txt
+  ```
+
+### 4. Prepare channels.txt
+
+Ensure that the `channels.txt` file is in the same directory as `main.py` and `app.py`. This file should follow the specified format for listing channel IDs or playlists.
+
+### 5. Start the Application
+
+Run the following command to start your application in Terminal:
+  ```cmd
+  python main.py
+  ```
 
 ## Post Instalation
 ### 1.
