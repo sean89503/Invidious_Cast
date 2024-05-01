@@ -75,43 +75,42 @@ create a 'channels.txt' file, please look at the example the formate is ChannelI
    I use [clouflaried tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) to point to Invidious_Cast
    
 5. Try it out (After a full run)
-got to https://yourdomain.com/  << This will show you all the xml files
-now try https://yourdomain.com/opml << this will help you create an opml url for importing into your podcast manager
+   got to https://yourdomain.com/  << This will show you all the xml files
+   now try https://yourdomain.com/opml << this will help you create an opml url for importing into your podcast manager
 
 ## Contributing
-Fork the repository.
-Create a new branch (git checkout -b feature/improvement).
-Make your changes.
-Commit your changes (git commit -am 'Add new feature').
-Push to the branch (git push origin feature/improvement).
-Create a new Pull Request.
-Please follow our Code of Conduct in all interactions.
+  Fork the repository.
+  Create a new branch (git checkout -b feature/improvement).
+  Make your changes.
+  Commit your changes (git commit -am 'Add new feature').
+  Push to the branch (git push origin feature/improvement).
+  Create a new Pull Request.
+  Please follow our Code of Conduct in all interactions.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+  This project is licensed under the MIT License - see the LICENSE file for details.
 
 Support
-For any questions or issues, please open an issue on GitHub.
+  For any questions or issues, please open an issue on GitHub.
 
 Acknowledgments
-This project uses the following libraries:
-waitress: https://github.com/Pylons/waitress
-Flask: https://flask.palletsprojects.com/
-Requests: https://docs.python-requests.org/
-xml.etree.ElementTree: https://docs.python.org/3/library/xml.etree.elementtree.html
+  This project uses the following libraries:
+  waitress: https://github.com/Pylons/waitress
+  Flask: https://flask.palletsprojects.com/
+  xml.etree.ElementTree: https://docs.python.org/3/library/xml.etree.elementtree.html
 
 Release History
-1.0.0
-Initial release: 4/8/2024
-
-Invidious Cast is not affiliated with or endorsed by YouTube or iTunes. This is an independent project for creating podcast RSS feeds from YouTube content.
+  1.0.0 - Initial release: 4/8/2024
+  2.0.0 - Rewrote to use yt-dlp
+  
+  Invidious Cast is not affiliated with or endorsed by YouTube or iTunes. This is an independent project for creating podcast RSS feeds from YouTube content.
 
 ## Roadmap
-add support for filtering shorts, lives and shows
-improve logic for geo-blocked videos
-Add support for more customization options in the RSS feed.
-Improve error handling and logging.
-Enhance performance for large YouTube channels.
+  add support for filtering shorts, lives and shows
+  improve logic for geo-blocked videos
+  Add support for more customization options in the RSS feed.
+  Improve error handling and logging.
+  Enhance performance for large YouTube channels.
 
 ## Contributors
 (@sean89503 )
