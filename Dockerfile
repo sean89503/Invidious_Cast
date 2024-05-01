@@ -6,14 +6,13 @@ FROM python:3.9-slim
 # Set working directory
 WORKDIR /app
 
-# Copy application code
+# Copy all application code
 COPY app.py /app
 COPY main.py /app
 
 # Health Check Module
 COPY health_check.py /app
 
-RUN pip install requests
 RUN pip install waitress
 RUN pip install flask
 RUN pip install yt_dlp
