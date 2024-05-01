@@ -12,37 +12,44 @@ Invidious Cast is a Flask application that generates RSS feeds for podcasts base
 - [Features](#features)
 - [Installation](#installation)
   - [Using Docker](#using-docker)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [Known Issues](#issues)
+- [Known Issues](#known-issues)
 - [Contributing](#contributing)
 - [License](#license)
 - [Roadmap](#roadmap)
 - [Contributors](#contributors)
 
 ## Features
-
-- Convert YouTube channel content into podcast RSS feeds.
+- Convert YouTube channel or Youtube playlist content into podcast RSS feeds.
 - Support for audio and video formats with customizable URLs.
 - Automatic handling of iTunes-specific tags for improved compatibility.
+- Thumbnail art support.
+- Blocking to prevent your feed from being listed.
+- Link to the source video added to the end of the description.
+- Only add videos that are available (no scheduled lives or geoblocked).
 
 ## Installation
-create a 'channels.txt' file, please look at the example the formate is ChannelID/playlist:type:limit:filter
-    ChannelID/Playlist: is case sensitive
-    type: video or audio (defualt video)
-    limit: number of video to put in feed (defualt 5)
-    filter: will be used to filter out video types(such as shorts and lives) (defualt none)
-    example lines:
-    ```UCMLSTcLBdfdsMQ0TfzQzUIw:video:3:none
-    UCMLSTcLB4HefgdfgfzQzUIw:audio:20:none
-    @TheInvidiousCast:video:5:none```    
-    or if you want to use defualts it can look like
-    ```UCMLSTcLBdfdsMQ0TfzQzUIw
-    UCMLSTcLB4HefgdfgfzQzUIw
-    @TheInvidiousCast```
-    each line must have the channel id and i one peramiter is needed please fill out all so it will know what permiter it is refuring 
-### Using Docker
+Create a `channels.txt` file. Please look at the example format:
+- ChannelID/Playlist: is case sensitive
+- Type: video or audio (default is video)
+- Limit: number of videos to put in feed (default is 5)
+- Filter: used to filter out video types (such as shorts and lives) (default is none)
 
+Example lines:
+
+```txt
+UCMLSTcLBdfdsMQ0TfzQzUIw:video:3:none
+UCMLSTcLB4HefgdfgfzQzUIw:audio:20:none
+@TheInvidiousCast:video:5:none
+```
+or if you want to use defualts it can look like
+```txt
+UCMLSTcLBdfdsMQ0TfzQzUIw
+UCMLSTcLB4HefgdfgfzQzUIw
+@TheInvidiousCast
+```
+each line must have the channel id and i one peramiter is needed please fill out all so it will know what permiter it is refuring 
+
+### Using Docker
 1. Clone the repository:
    ```cmd
    git clone https://github.com/sean89503/Invidious_Cast.git
@@ -77,6 +84,9 @@ create a 'channels.txt' file, please look at the example the formate is ChannelI
 5. Try it out (After a full run)
    got to https://yourdomain.com/  << This will show you all the xml files
    now try https://yourdomain.com/opml << this will help you create an opml url for importing into your podcast manager
+
+## Known Issues
+  - filter peramiter is not working
 
 ## Contributing
   Fork the repository.
