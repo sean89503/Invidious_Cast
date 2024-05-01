@@ -4,7 +4,6 @@ services:
     image: invidiouscast # Assuming "invidiouscast" is the image name  
     environment:  
      - CAST_DOMAIN=https://YOURDOMAINTOINVIDIOUSCAST
-     - WORKERS=12 #defualt it 12
      - CRON=300 # seconds beween eac run of checking all the channels/playlist
      
     ports:  
