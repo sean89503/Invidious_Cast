@@ -1,9 +1,9 @@
-import requests
 import xml.etree.ElementTree as ET
 import os
 from datetime import datetime
 import time
 import logging
+import multiprocessing
 from multiprocessing import Process
 from app import app
 from waitress import serve
@@ -16,9 +16,6 @@ file_path = "channels.txt"
 CAST_DOMAIN = os.getenv('CAST_DOMAIN')
 if CAST_DOMAIN == None:
     CAST_DOMAIN = 'NEEDStoBEset'
-WORKERS = os.getenv('WORKERS')
-if WORKERS == None:
-    WORKERS = 12
 CRON = os.getenv('CRON')
 if CRON == None:
     CRON = 300
@@ -453,19 +450,36 @@ def find_latest_video(filename):
   except Exception as e:
     return 'nofile'
   
-def run_with_workers(port, num_workers):
-    num_workers = int(num_workers)
-    logging.info(f'Starting web service on port 5898 and {num_workers} workers!')
-    # Simulate multiple workers with threads within a single process
-    for _ in range(num_workers):  # Loop to create "worker" threads
-        serve(app, listen=f"0.0.0.0:{port}")
+def worker(queue):
+    while True:
+        task = queue.get()
+        if task is None:
+            break
+        print(f"Processing task {task}")
+        # Perform data processing on the task (e.g., calculations, transformations)
+        result = task * 2  # Example data processing operation
+        print(f"Processed task result: {result}")
+        time.sleep(1)  # Simulate processing time
+ 
+  
+def run_with_workers(port, num_workers, queue):
+    # Create and start worker processes
+    processes = [Process(target=worker, args=(queue,)) for _ in range(num_workers)]
+    for process in processes:
+        process.start()
+
+    # Serve the Flask app with Waitress
+    serve(app, host='0.0.0.0', port=port)
 
 if __name__ == '__main__':
-      def start_link_updater(file_path):
+    # Create a multiprocessing Queue
+    queue = multiprocessing.Queue()
+
+    def start_link_updater(file_path):
         process = Process(target=read_channel_ids_from_file, args=(file_path,))
         process.daemon = True
         process.start() 
-      start_link_updater(file_path)
-      #serve(app)
-      run_with_workers(5895, WORKERS)
+
+    start_link_updater(file_path)
+    run_with_workers(5895,12, queue)
       
