@@ -84,6 +84,8 @@ each line must have the channel id and i one peramiter is needed please fill out
 5. Try it out (After a full run)
    got to https://yourdomain.com/  << This will show you all the xml files
    now try https://yourdomain.com/opml << this will help you create an opml url for importing into your podcast manager
+   ![image](https://github.com/sean89503/Invidious_Cast/assets/22017525/3e3bfe15-a9ec-4978-9536-f00a7f51900d)
+
 
 ## Known Issues
   - filter peramiter is not working
