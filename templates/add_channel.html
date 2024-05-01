@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Channel</title>
+</head>
+<body>
+  <img src="https://raw.githubusercontent.com/sean89503/Invidious_Cast/main/logo.png" width="80" hight="80"  alt="Invidious Cast Logo">  <h1>Add Channel</h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  <form method="post" action="/add">
+    <label for="channel_id">Channel ID:</label>
+    <input type="text" id="channel_id" name="channel_id" required><br>
+
+    <label for="channel_type">Channel Type (optional):</label>
+    <input type="text" id="channel_type" name="channel_type" placeholder="video (default)"><br>
+
+    <label for="channel_limit">Limit (optional):</label>
+    <input type="number" id="channel_limit" name="channel_limit" min="1" value="5"><br>
+
+    <button type="submit">Add Channel</button>
+  </form>
+</body>
+</html>

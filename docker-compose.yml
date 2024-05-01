@@ -1,0 +1,15 @@
+version: "3"
+services:
+  invidiouscast:  
+    image: invidiouscast # Assuming "invidiouscast" is the image name  
+    environment:  
+     - CAST_DOMAIN=https://YOURDOMAINTOINVIDIOUSCAST
+     - CRON=300 # seconds beween eac run of checking all the channels/playlist
+     
+    ports:  
+     - "5895:5895" # Map container port 5895 to host port 5895 (adjust if needed)    
+    volumes:  
+     - /HOST/Docker/invidious-cast/xml_files:/app/xml_files:rw # Mount read-write volume  
+     - /HOST/Docker/invidious-cast/channels.txt:/app/channels.txt:rw # Mount read-write volume 
+     - /HOST/invidious-cast/templates:/app/templates:rw # Mount read-write volume 
+    restart: unless-stopped # Restart container on failure 
