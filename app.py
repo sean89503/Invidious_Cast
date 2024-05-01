@@ -8,21 +8,16 @@ import logging
 from multiprocessing import Process
 import yt_dlp
 
-
-
-
-
 app = Flask(__name__)
 
 #########Set Peramiters
 file_path = "channels.txt"
 PERMITTED_SOURCES = os.getenv('PERMITTED_SOURCES', 'https://yewtu.be,https://invidious.materialio.us,https://inv.tux.pizza,https://vid.puffyan.us,https://yewtu.be,https://iv.nboeck.de,https://yt.drgnz.club,https://iv.datura.network,https://invidious.fdn.fr,https://invidious.perennialte.ch,https://yt.artemislena.eu,https://invidious.flokinet.to,https://invidious.projectsegfau.lt,https://invidious.privacydev.net,https://iv.melmac.space,https://iv.ggtyler.dev,https://cal1.iv.ggtyler.dev,https://nyc1.iv.ggtyler.dev,https://invidious.lunar.icu,https://inv.nadeko.net,https://invidious.protokolla.fi').split(',')
 XML_DIRECTORY = os.path.join(os.getcwd(), 'xml_files')
+CAST_DOMAIN = os.getenv('CAST_DOMAIN')
 logging.basicConfig(level=logging.INFO)
 main_logger = logging.getLogger(__name__)
 process_logger = logging.getLogger('cast')
-# Replace with a strong, random string (at least 24 characters)
-app.secret_key = 'your_very_strong_secret_key'
 
 def fetch_url(video_id, typed):
     # Define the video URL
@@ -63,103 +58,6 @@ def fetch_url(video_id, typed):
         print("Error:", e)
         # Handle the error condition if needed
 
-
-def fetch_videos_info(video_id, vidioquality):
-  # Base URL to construct video information URLs
-  base_url = f"/api/v1/videos/{video_id}"
-  videos_data = []
-
-  for permitted_source in PERMITTED_SOURCES:
-      url = f"{permitted_source}{base_url}"
-      try:
-        response = requests.get(url, timeout=30)
-        # Check status code before parsing JSON
-        if response.status_code == 200:
-           data = response.json()
-           if "error" in data:
-                logging.error(f"Error in response from {url}: {data['error']}")
-           else:
-                
-                videos_data.append(data)
-                break
-          # Successful response, no need to continue iterating
-        else:
-          logging.error(f"Error fetching videos info from {url}: {response.status_code}")
-      except ValueError:
-        logging.error(f"Error parsing JSON response from {url}")
-      except requests.exceptions.RequestException as e:
-         logging.error(f"Error fetching videos info from {url}: {e}")
-  processed_videos = []  # List to store processed video details
-    # Process fetched videos
-  for video in videos_data:
-      if isinstance(video, dict):
-    # Extract relevant information from the video data
-            title = video.get('title', 'Untitled Video')
-            description = video.get('description', '')
-            published = video.get('published', 0)
-            authorId = video.get('authorId', 0)
-            lengthSeconds = video.get('lengthSeconds', 0)
-            formatStreams = video.get('formatStreams', [])
-            adaptiveFormats = video.get('adaptiveFormats', [])
-            videodir = [
-                format_item['url']
-                for format_item in formatStreams
-                if format_item.get('itag') == '22'
-            ]
-            audiodir = [
-                format_item['url']
-                for format_item in adaptiveFormats
-                if format_item.get('itag') == '251'
-            ]
-            videohigh = f'{PERMITTED_SOURCES[0]}/latest_version?id={video_id}&itag=22'
-            audiohigh = f'{PERMITTED_SOURCES[0]}/latest_version?id={video_id}&itag=140'
-            # Check for both "video" and "scheduled" types
-            if video.get('type') in ("video", "scheduled"):
-                title = video.get('title', 'Untitled Video')
-                description = video.get('description', '')
-                published = video.get('published', 0)
-                authorId = video.get('authorId', 0)
-                lengthSeconds = video.get('lengthSeconds', 0)
-                formatStreams = video.get('formatStreams', [])
-                adaptiveFormats = video.get('adaptiveFormats', [])
-                videodir = [
-                    format_item['url']
-                    for format_item in formatStreams
-                    if format_item.get('itag') == '22'
-                ]
-                audiodir = [
-                    format_item['url']
-                    for format_item in adaptiveFormats
-                    if format_item.get('itag') == '251'
-                ]
-                video
-                videohigh = f'{PERMITTED_SOURCES[0]}/latest_version?id={video_id}&itag=22'
-                audiohigh = f'{PERMITTED_SOURCES[0]}/latest_version?id={video_id}&itag=140'
-                   
-            # Select the appropriate video and audio URLs based on quality
-            #videogreat = videohigh[0] if videohigh else None
-            #audiohigh = audiohigh[0] if audiohigh else None
-            # Create a dictionary for the processed video
-            processed_video = {
-                'title': title,
-                'videodescription': description,
-                'authorId': authorId,
-                'published': published,
-                'length_seconds': lengthSeconds,
-                'videogreat': videohigh,
-                'audiohigh': audiohigh,
-                'videodir' : videodir,
-                'audiodir' : audiodir
-                
-            }
-            # Append the processed video to the list
-            processed_videos.append(processed_video)
-      else:
-            # Log a warning if the video data format is invalid
-            logging.warning("Invalid video data format")
-    
-  return processed_videos  # Return the list of processed videos legacy code but to issue https://github.com/iv-org/invidious/issues/4498
-    
 #####START OF WEB APP ###############
 
 @app.route('/url')
@@ -219,6 +117,8 @@ def generate_opml(files, domain):
 @app.route('/opml')
 def get_opml():
   domain = request.args.get('domain')
+  if domain == None:
+    domain = CAST_DOMAIN
   print(f"Received domain: {domain}")  # Add this line
   if domain:
     files = [f for f in os.listdir(XML_DIRECTORY) if f.endswith('.xml')]

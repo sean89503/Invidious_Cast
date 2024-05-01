@@ -12,6 +12,8 @@ Invidious Cast is a Flask application that generates RSS feeds for podcasts base
 - [Features](#features)
 - [Installation](#installation)
   - [Using Docker](#using-docker)
+  - [Using Windows](#using-windows)
+  - [Using Mac](#using-mac)
 - [Known Issues](#known-issues)
 - [Contributing](#contributing)
 - [License](#license)
@@ -20,6 +22,7 @@ Invidious Cast is a Flask application that generates RSS feeds for podcasts base
 
 ## Features
 - Convert YouTube channel or Youtube playlist content into podcast RSS feeds.
+- No API needed
 - Support for audio and video formats with customizable URLs.
 - Automatic handling of iTunes-specific tags for improved compatibility.
 - Thumbnail art support.
@@ -74,19 +77,103 @@ each line must have the channel id and i one peramiter is needed please fill out
   -v /HOST/invidious-cast/templates:/app/templates:rw \
   --restart unless-stopped \
   invidiouscast
-
 ```
    make sure you add your 'CAST_DOMAIN' URL example "https://invidiouscast.example.com" this is were you want to host it. .
    Map the volumes yo were you can access them. the app could run without you having access but it is easer to trublshout and manahe the channels file without     having to access the container.
   
-   I use [clouflaried tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) to point to Invidious_Cast
+## Using Windows
+### 1. Copy Files
+
+Copy the following files and folders to your desired location:
+- `main.py`
+- `app.py`
+- `requirments.txt`
+- `Template` folder (contains HTML templates for your app)
+
+### 2. Set Environment Variables
+
+1. Open Command Prompt (CMD) as an administrator.
+2. Set the `CAST_DOMAIN` variable:
+
+   ```cmd
+   set CAST_DOMAIN=https://yourcastdomain.com
+   ```
+3. Set the `CRON` variable (time in seconds between checks for new episodes):
+   ```cmd
+   set CRON=300
+   ```
+ 
+### 3. Install Requirements
+
+1. Navigate to the directory where your files are located.
+2. Install the required packages:
+   ```cmd
+   pip install -r requirements.txt
+   ```
+
+### 4. Prepare channels.txt
+
+Ensure that the `channels.txt` file is in the same directory as `main.py` and `app.py`. This file should follow the specified format for listing channel IDs or playlists.
+
+### 5. Start the Application
+
+Run the following command to start your application:
+  ```cmd
+  python main.py
+  ```
+  If you want to run it at a service I would use [nssm](https://nssm.cc/)
+
+## Using Mac
+### 1. Copy Files
+
+Copy the following files and folders to your desired location:
+- `main.py`
+- `app.py`
+- `requirments.txt`
+- `Template` folder (contains HTML templates for your app)
+
+### 2. Set Environment Variables
+
+1. Open Terminal.
+2. Set the `CAST_DOMAIN` variable:
+   ```cmd
+   export CAST_DOMAIN=https://yourcastdomain.com
+   ```
+3. Set the `CRON` variable (time in seconds between checks for new episodes):
+  ```cmd
+  export CRON=300
+  ```
+
+### 3. Install Requirements
+
+1. Navigate to the directory where your files are located in Terminal.
+2. Install the required packages:
+  ```cmd
+  pip install -r requirements.txt
+  ```
+
+### 4. Prepare channels.txt
+
+Ensure that the `channels.txt` file is in the same directory as `main.py` and `app.py`. This file should follow the specified format for listing channel IDs or playlists.
+
+### 5. Start the Application
+
+Run the following command to start your application in Terminal:
+  ```cmd
+  python main.py
+  ```
+
+## Post Instalation
+### 1.
+  Pount your domain to invidious_cast 
+  I use and suggest [clouflaried tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) 
    
-5. Try it out (After a full run)
-   got to https://yourdomain.com/  << This will show you all the xml files
-   now try https://yourdomain.com/opml << this will help you create an opml url for importing into your podcast manager
+### 2.
+   After a full run
+   Go to `https://yourdomain.com/`  << This will show you all the xml files
+   now try `https://yourdomain.com/opml` << this will help you create an opml url for importing into your podcast manager
    
    ![image](https://github.com/sean89503/Invidious_Cast/assets/22017525/3e3bfe15-a9ec-4978-9536-f00a7f51900d)
-
 
 ## Known Issues
   - filter peramiter is not working
@@ -125,6 +212,7 @@ Release History
   - Add support for more customization options in the RSS feed.
   - Improve error handling and logging.
   - Enhance performance for large YouTube channels.
+  - Support for more services
 
 ## Contributors
 (@sean89503 )
