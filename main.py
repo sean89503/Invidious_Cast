@@ -238,7 +238,7 @@ def create_podcast_feed(type_param, channel_info, channel_id, filter, vidioquali
         pubfromvid = video.get('published')
         formatted_date = format_published_date(pubfromvid)
         length_seconds = video.get('duration', 0)
-        itunes_duration = format_duration(length_seconds)
+        itunes_duration = format_duration(int(length_seconds))
         linkbackup = f'https://www.youtube.com/watch?v={video_id}'
         videolink = video.get('webpage_url', linkbackup)
         description = video.get('description', 'error')
@@ -396,8 +396,8 @@ def read_channel_ids_from_file(file_path, max_retries=5):
                         logging.info(f'Done Checking {title} ({channel_id})') 
         except ValueError:
             logging.warning(f"Invalid channel type '{channel_type}' for channel {title} ")
-        logging.info(f'Finished round of lookups. Will look agian in f{CRON} seconds ') 
-        time.sleep(CRON)  # Delay for 60 seconds before checking the file again
+        logging.info(f'Finished round of lookups. Will look agian in {CRON} seconds ') 
+        time.sleep(int(CRON))  # Delay for 60 seconds before checking the file again
 
 def find_latest_video(filename):
   """
