@@ -142,7 +142,8 @@ def list_files():
  # Add the HTML <img> tag for the logo
  logo_url = 'https://github.com/sean89503/Invidious_Cast/blob/main/logo.png?raw=true'
  logo_html = f'<img src="{logo_url}" alt="Logo" style="width: 100px; height: 100px;"><br>'
- return f'{logo_html}<h1>XML Files:</h1>{file_links}'
+ links_html = '<a href="/opml">OPML</a> | <a href="/manage">Manage</a><br>'
+ return f'{logo_html}{links_html}<h1>XML Files:</h1>{file_links}'
 
 def generate_opml(files, domain):
  opml_content = '<?xml version="1.0" encoding="UTF-8"?><opml version="1.0">'
