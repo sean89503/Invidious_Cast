@@ -396,8 +396,8 @@ def read_channel_ids_from_file(file_path, max_retries=5):
                         logging.info(f'Done Checking {title} ({channel_id})') 
         except ValueError:
             logging.warning(f"Invalid channel type '{channel_type}' for channel {title} ")
-        logging.info(f'Finished round of lookups. Will look agian in f{CRON} seconds ') 
-        time.sleep(CRON)  # Delay for 60 seconds before checking the file again
+        logging.info(f'Finished round of lookups. Will look agian in {CRON} seconds ') 
+        time.sleep(int(CRON))  # Delay for 60 seconds before checking the file again
 
 def find_latest_video(filename):
   """
