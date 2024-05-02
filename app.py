@@ -119,6 +119,8 @@ def get_opml():
   domain = request.args.get('domain')
   if domain == None:
     domain = CAST_DOMAIN
+    if domain != None:
+       return redirect(f'/opml?domain={domain}')
   print(f"Received domain: {domain}")  # Add this line
   if domain:
     files = [f for f in os.listdir(XML_DIRECTORY) if f.endswith('.xml')]
