@@ -10,15 +10,14 @@ from waitress import serve
 import yt_dlp
 import json
 
-
 #########Set Peramiters
 file_path = "channels.txt"
 CAST_DOMAIN = os.getenv('CAST_DOMAIN')
 if CAST_DOMAIN == None:
     CAST_DOMAIN = 'NEEDStoBEset'
-CRON = os.getenv('CRON')
+CRON = os.getenv('CAST_CRON')
 if CRON == None:
-    CRON = 300
+    CRON = 86400
 XML_DIRECTORY = os.path.join(os.getcwd(), 'xml_files')
 logging.basicConfig(level=logging.INFO)
 process_logger = logging.getLogger('ydl')

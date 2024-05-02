@@ -4,7 +4,8 @@ services:
     image: invidiouscast # Assuming "invidiouscast" is the image name  
     environment:  
      - CAST_DOMAIN=https://YOURDOMAINTOINVIDIOUSCAST
-     - CRON=300 # seconds beween eac run of checking all the channels/playlist
+     - CAST_CRON=300 # seconds beween eac run of checking all the channels/playlist
+     - CAST_TRUSTED_NETWORK=192.168.0. # ip of the address you want to manage from
      
     ports:  
      - "5895:5895" # Map container port 5895 to host port 5895 (adjust if needed)    

@@ -70,7 +70,8 @@ each line must have the channel id and i one peramiter is needed please fill out
   sudo docker run -d \
   --name invidiouscast \
   -e CAST_DOMAIN=https://YOURDOMAINTOINVIDIOUSCAST \
-  -e CRON=300 \
+  -e CAST_CRON=300 \
+  -e CAST_TRUSTED_NETWORK=YOUR_DEVICE_IP_YOU_MANAGE_WITH
   -p 5895:5895 \
   -v /HOST/Docker/invidious-cast/xml_files:/app/xml_files:rw \
   -v /HOST/Docker/invidious-cast/channels.txt:/app/channels.txt:rw \
@@ -78,8 +79,10 @@ each line must have the channel id and i one peramiter is needed please fill out
   --restart unless-stopped \
   invidiouscast
 ```
-   make sure you add your 'CAST_DOMAIN' URL example "https://invidiouscast.example.com" this is were you want to host it. .
-   Map the volumes yo were you can access them. the app could run without you having access but it is easer to trublshout and manahe the channels file without     having to access the container.
+   - Set `CAST_DOMAIN` URL example "https://invidiouscast.example.com" This is were you want to host it.
+   - Set the `CAST_CRON` variable (time in seconds between checks for new episodes default, if variable is not found, is once a day `86400`)
+   - Set the `CAST_TRUSTED_NETWORK` variable (the device IP or network example 1 host 192.168.0.10 or a group like 192.168.0.2 will let anyone that starts with 192.168.0.2 or 192.168.0.2*) * don't trust your tunnel or proxy         as it will allow everyone to have access
+   - Map the volumes to where you can access them. the app could run without you having access but it is easier to troubleshoot and manage the channels file without having access to the container.
   
 ## Using Windows
 ### 1. Copy Files
@@ -98,9 +101,13 @@ Copy the following files and folders to your desired location:
    ```cmd
    set CAST_DOMAIN=https://yourcastdomain.com
    ```
-3. Set the `CRON` variable (time in seconds between checks for new episodes):
+3. Set the `CAST_CRON` variable (time in seconds between checks for new episodes default if variable is not found is once a day `86400`):
    ```cmd
-   set CRON=300
+   set CAST_CRON=300
+   ```
+4. Set the `CAST_TRUSTED_NETWORK` variable (the device IP or network example 1 host 192.168.0.10 or a group like 192.168.0.2 will let anyone that starts with 192.168.0.2 or 192.168.0.2*) *don't trust your tunnel or proxy as it will allow everyone to have access:
+   ```cmd
+   set CAST_TRUSTED_NETWORK=192.168.0.
    ```
  
 ### 3. Install Requirements
@@ -121,7 +128,7 @@ Run the following command to start your application:
   ```cmd
   python main.py
   ```
-  If you want to run it at a service I would use [nssm](https://nssm.cc/)
+  If you want to run invidious as a service, I suggest useing [nssm](https://nssm.cc/)
 
 ## Using Mac
 ### 1. Copy Files
@@ -136,12 +143,16 @@ Copy the following files and folders to your desired location:
 
 1. Open Terminal.
 2. Set the `CAST_DOMAIN` variable:
-   ```cmd
-   export CAST_DOMAIN=https://yourcastdomain.com
-   ```
+  ```cmd
+  export CAST_DOMAIN=https://yourcastdomain.com
+  ```
 3. Set the `CRON` variable (time in seconds between checks for new episodes):
   ```cmd
-  export CRON=300
+  export CAST_CRON=300
+  ```
+4.  Set the `CAST_TRUSTED_NETWORK` variable (the device IP or network example 1 host 192.168.0.10 or a group like 192.168.0.2 will let anyone that starts with 192.168.0.2 or 192.168.0.2*) *don't trust your tunnel or proxy as it will allow everyone to have access :
+  ```cmd
+  export CAST_TRUSTED_NETWORK=192.168.0.
   ```
 
 ### 3. Install Requirements
@@ -154,7 +165,7 @@ Copy the following files and folders to your desired location:
 
 ### 4. Prepare channels.txt
 
-Ensure that the `channels.txt` file is in the same directory as `main.py` and `app.py`. This file should follow the specified format for listing channel IDs or playlists.
+Ensure that `channels.txt` file is in the same directory as `main.py` and `app.py`. This file should follow the specified format for listing channel IDs or playlists.
 
 ### 5. Start the Application
 
@@ -170,8 +181,10 @@ Run the following command to start your application in Terminal:
    
 ### 2.
    After a full run
-   Go to `https://yourdomain.com/`  << This will show you all the xml files
-   now try `https://yourdomain.com/opml` << this will help you create an opml url for importing into your podcast manager
+   Try
+   - `https://yourdomain.com/`  << This will show you all the xml files
+   - `https://yourdomain.com/opml` << this will help you create an opml URL for importing into your podcast manager
+   - `https://yourdomain.com/manage` << this will allow you to edit the `channels.txt` localhost what  is listed in parameter access by defualt and what is listed in `CAST_TRUSTED_NETWORK`
    
    ![image](https://github.com/sean89503/Invidious_Cast/assets/22017525/3e3bfe15-a9ec-4978-9536-f00a7f51900d)
 
