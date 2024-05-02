@@ -1,5 +1,4 @@
 from flask import Flask, request, send_from_directory, render_template, redirect, flash, Response
-import requests
 import xml.etree.ElementTree as ET
 import os
 from datetime import datetime
@@ -12,9 +11,9 @@ app = Flask(__name__)
 
 #########Set Peramiters
 file_path = "channels.txt"
-PERMITTED_SOURCES = os.getenv('PERMITTED_SOURCES', 'https://yewtu.be,https://invidious.materialio.us,https://inv.tux.pizza,https://vid.puffyan.us,https://yewtu.be,https://iv.nboeck.de,https://yt.drgnz.club,https://iv.datura.network,https://invidious.fdn.fr,https://invidious.perennialte.ch,https://yt.artemislena.eu,https://invidious.flokinet.to,https://invidious.projectsegfau.lt,https://invidious.privacydev.net,https://iv.melmac.space,https://iv.ggtyler.dev,https://cal1.iv.ggtyler.dev,https://nyc1.iv.ggtyler.dev,https://invidious.lunar.icu,https://inv.nadeko.net,https://invidious.protokolla.fi').split(',')
 XML_DIRECTORY = os.path.join(os.getcwd(), 'xml_files')
 CAST_DOMAIN = os.getenv('CAST_DOMAIN')
+CAST_TRUSTED_NETWORK = os.getenv('CAST_TRUSTED_NETWORK','127.0.0.1').split(',')
 logging.basicConfig(level=logging.INFO)
 main_logger = logging.getLogger(__name__)
 process_logger = logging.getLogger('cast')
@@ -59,6 +58,57 @@ def fetch_url(video_id, typed):
         # Handle the error condition if needed
 
 #####START OF WEB APP ###############
+@app.route('/manage')
+def index():
+    remote_addr = request.remote_addr
+    if any(remote_addr.startswith(pattern) for pattern in CAST_TRUSTED_NETWORK):
+        cleanit()
+        with open(file_path, 'r') as file:
+            lines = file.readlines()  # Read all lines from the file
+        return render_template('manage.html', lines=lines)
+    else:
+        return redirect('/')
+
+@app.route('/add_line', methods=['POST'])
+def add_line():
+    remote_addr = request.remote_addr
+    if any(remote_addr.startswith(pattern) for pattern in CAST_TRUSTED_NETWORK):
+        new_line = request.form.get('new_line')  # Get the new line from the form
+        # Check if the file is empty
+        file_empty = os.stat(file_path).st_size == 0
+
+        with open(file_path, 'a') as file:
+            if not file_empty:  # If the file is not empty, add a newline character before the new line
+                file.write('\n')
+            file.write(new_line)  # Append the new line to the file 
+            cleanit()
+    return redirect('/manage')
+def cleanit():
+    line_to_remove = ''  # Get the line to remove from the form
+    with open(file_path, 'r') as file:
+        lines = file.readlines()  # Read all lines from the file
+    with open(file_path, 'w') as file:
+        for line in lines:
+            if line.strip() != line_to_remove.strip() and line.strip() != '':  # Remove if not an empty line or just spaces
+                file.write(line)
+
+
+
+@app.route('/remove_line', methods=['POST'])
+def remove_line():
+    remote_addr = request.remote_addr
+    if any(remote_addr.startswith(pattern) for pattern in CAST_TRUSTED_NETWORK):
+        new_line = request.form.get('new_line')  # Get the new line from the form
+        line_to_remove = request.form.get('line_to_remove')  # Get the line to remove from the form
+        print(line_to_remove)
+        with open(file_path, 'r') as file:
+            lines = file.readlines()  # Read all lines from the file
+        with open(file_path, 'w') as file:
+            for line in lines:
+                if line.strip() != line_to_remove.strip():  # Write all lines except the one to remove
+                    file.write(line)
+        cleanit()
+    return redirect('/manage')        
 
 @app.route('/url')
 def url():
@@ -121,146 +171,18 @@ def get_opml():
     domain = CAST_DOMAIN
     if domain != None:
        return redirect(f'/opml?domain={domain}')
-  print(f"Received domain: {domain}")  # Add this line
   if domain:
     files = [f for f in os.listdir(XML_DIRECTORY) if f.endswith('.xml')]
     opml_data = generate_opml(files, domain)
     return Response(opml_data, mimetype='text/xml')
   else:
     # Redirect to form if no domain submitted
-    return redirect('/opml_form')
+    return redirect('/')
 
   files = [f for f in os.listdir(XML_DIRECTORY) if f.endswith('.xml')]
   opml_data = generate_opml(files, domain)
   return Response(opml_data, mimetype='text/xml')
-
-@app.route('/opml_form')
-def opml_form():
-    return render_template('opml_form.html')
-
-def remove_channel(channel_id):
-    file_path = 'channels.txt'
-    
-    # Read existing channel data efficiently
-    channels = []
-    try:
-        with open(file_path, 'r+') as f:
-            lines = f.readlines()
-            filtered_lines = [line for line in lines if not line.startswith(channel_id)]
-            new_file_size = sum(len(line) for line in filtered_lines)
-            f.seek(0)
-            f.truncate(new_file_size)
-            f.writelines(filtered_lines)
-
-        # Remove blank lines from the file
-        remove_blank_lines_from_file(file_path)
-
-        # Remove XML file if it exists
-        xml_filepath = os.path.join(XML_DIRECTORY, f'{channel_id}.xml')
-        if os.path.exists(xml_filepath):
-            os.remove(xml_filepath)
-
-        return True
-    except IOError as e:
-        print(f"Error removing channel: {e}")
-        return False
-
-@app.route('/remove', methods=['GET', 'POST'])
-def remove_channel_form():
-    remote_addr = request.remote_addr
-    print(f'ip return as {remote_addr}')
-    if remote_addr == '127.0.0.1' or remote_addr.startswith('10.0.0.'):
-        if request.method == 'POST':
-            channel_id = request.form['channel_id']
-            if remove_channel(channel_id):
-                flash(f'Channel removed successfully (if it existed) from {remote_addr}.')
-                time.sleep(3)
-            else:
-                flash('Failed to remove channel.')  # Use flash message for error
-                time.sleep(3)
-            return redirect('/')  # Redirect to OPML after removal 
-
-    return render_template('remove_channel.html')
-
-def has_text_in_last_line(filename):
-  try:
-    with open(filename, 'r') as f:
-      lines = f.readlines()
-      filtered_lines = [line for line in lines if line.strip() != '']
-      if not lines:  # Handle empty file case
-        return False
-      if filtered_lines and not filtered_lines[-1].strip():
-            filtered_lines.pop()  # Remove the last line (if empty)
-      f.seek(0)
-      f.truncate()
-      f.writelines(filtered_lines)
-  except IOError as e:
-    print(f"Error opening file: {e}")
-    return False  # Indicate error
-
-def remove_blank_lines_from_file(file_path):
-    try:
-        with open(file_path, 'r+') as f:
-            lines = f.readlines()
-            filtered_lines = [line for line in lines if line.strip()]
-            f.seek(0)
-            f.truncate()
-            f.writelines(filtered_lines)
-            return True
-    except IOError as e:
-        print(f"Error opening or writing to file: {e}")
-        return False
-
-def is_file_empty(file_path):
-    try:
-        with open(file_path, 'r') as f:
-            return not any(f)
-    except IOError as e:
-        print(f"Error opening file: {e}")
-        return True
-
-def process_form(channel_id, channel_type, channel_limit):
-    # Validate channel ID (optional, customize validation as needed)
-    if not channel_id:
-        flash('Channel ID is required.')
-        return False
-
-    # Set default values for type and limit if empty
-    channel_type = channel_type if channel_type else 'video'
-    channel_limit = int(channel_limit) if channel_limit else 5
-    file_path = 'channels.txt'
-
-    if remove_blank_lines_from_file(file_path):
-        if is_file_empty(file_path):
-            with open(file_path, 'a') as f:
-                f.write(f"{channel_id}:{channel_type}:{channel_limit}")  # Add without newline if empty
-        else:
-            with open(file_path, 'r+') as f:
-                f.seek(0, 2)  # Move to the end of the file
-                f.write(f"{channel_id}:{channel_type}:{channel_limit}")  # Add with newline if not empty
-        
-        flash(f'Channel "{channel_id}" (type: {channel_type}, limit: {channel_limit}) added successfully! {request.remote_addr}')
-        return True
-    else:
-        return False
-    
-@app.route('/add', methods=['GET', 'POST'])
-def add_channel():
-    remote_addr = request.remote_addr
-    #print(f'ip return as {remote_addr}')
-    if remote_addr == '127.0.0.1' or remote_addr.startswith('10.0.0.'):
-        if request.method == 'POST':        
-            channel_id = request.form['channel_id']
-            channel_type = request.form['channel_type']
-            channel_limit = request.form['channel_limit']
-        #channel_filter = request.form['channel_filter', 'none']
-
-            if process_form(channel_id, channel_type, channel_limit):
-                return redirect('/add')  # Redirect to clear form after success
-
-        return render_template('add_channel.html')
   
 if __name__ == '__main__':
-      app.add_url_rule('/opml_form', view_func=opml_form)
       app.run(host='0.0.0.0', port=5895)
      
