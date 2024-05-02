@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channels Editor</title>
+</head>
+<body>
+	<img src="https://raw.githubusercontent.com/sean89503/Invidious_Cast/main/logo.png" width="80" hight="80"  alt="Invidious Cast Logo">  <h1>Channel Editor:</h1>
+    <h2>Add Line:</h2>
+    <form action="/add_line" method="post">
+        <input type="text" name="new_line" placeholder="Enter new line">
+        <button type="submit">Add Line</button>
+    </form>
+    <h2>Manage Lines</h2>
+    <ul>
+        {% for line in lines %}
+        <li>
+            <form action="/remove_line" method="post" class="remove-form">
+                <input type="hidden" name="line_to_remove" value="{{ line }}">
+                <button type="submit" onclick="return confirm('Are you sure you want to remove this line?')">Remove</button>
+				{{ line }}
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
